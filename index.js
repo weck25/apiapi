@@ -2,16 +2,13 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const sqlite3 = require("sqlite3").verbose();
 require('dotenv').config();
-
+const cors = require('cors');
 
 const app = express();
-
+app.use(cors());
 app.use(express.json()); // Untuk parsing JSON
 const db = new sqlite3.Database("./wallets.db");
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server berjalan di port ${PORT}`);
-});
+
 app.post("/api/claims", verifyToken, (req, res) => {
   const walletAddress = req.body.data.walletAddress;
 
@@ -60,3 +57,5 @@ function verifyToken(req, res, next) {
     res.sendStatus(401);
   }
 }
+
+module.exports = app
